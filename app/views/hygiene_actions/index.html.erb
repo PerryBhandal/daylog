@@ -1,0 +1,35 @@
+<div class="row">
+  <div class="pull-right">
+    <a class="btn btn-large btn-primary" type="button" href="<%= new_hygiene_action_path %>">New</a>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-12">
+    <div class="table-responsive">
+      <table class="table centered-contents">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Actions</th>
+            <th>Comments</th>
+            <th colspan="2"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @hygiene_actions.each do |action| %>
+          <tr class="no-td-whitespace">
+            <td><%= action.action_time %></td>
+            <td><%= action.actions %></td>
+            <td><%= action.comments %></td>
+            <td><%= link_to 'Edit', edit_hygiene_action_path(action) %></td>
+            <td><%= link_to 'Destroy', action, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>

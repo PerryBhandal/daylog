@@ -1,0 +1,20 @@
+<%= bootstrap_form_for(@hygiene_action) do |f| %>
+  <% if @hygiene_action.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@hygiene_action.errors.count, "error") %> prohibited this hygiene_action from being saved:</h2>
+
+      <ul>
+      <% @hygiene_action.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+    <%= f.datetime_select :action_time %>
+    <%= f.text_area :actions %>
+    <%= f.text_area :comments %>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

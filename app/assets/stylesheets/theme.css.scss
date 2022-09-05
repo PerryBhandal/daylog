@@ -1,0 +1,90 @@
+/* BEGIN CONFIGURATION */
+
+// Title
+$title-bg-color: #2980b9;
+$title-font-size: 35px;
+$title-color: #FFFFFF;
+
+/* END CONFIGURATION */
+
+.navbar-static-top {
+  margin-bottom: 19px;
+}
+
+#header-nav {
+  margin-bottom: 0px;
+}
+
+.page-title-fw-bg {
+  background: $title-bg-color;
+  padding: 15px 10px;
+
+  h1 {
+    font-size: $title-font-size;
+    color: $title-color;
+    display: inline;
+    margin: 0px;
+    padding: 0px;
+  }
+}
+
+/* Wrapper */
+
+
+/* FORMS */
+
+.page-content-wrapper {
+  margin: 20px 10px;
+}
+
+/* TABLES */
+
+.centered-contents tr {
+  th, td {
+    text-align: center;
+
+  }
+}
+
+/* TABLES */
+
+.no-td-whitespace > td {
+  white-space: pre-wrap;
+}
+
+/* NOTE PANEL */
+
+.panel-wrapper {
+  margin: 20px 0px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: $title-bg-color;
+
+  > .panel-segment { 
+    > .note-panel-header {
+  color: #FFFFFF;
+      background: $title-bg-color;
+      padding: 10px 20px;
+          font-size: 20px;
+      font-weight: bold;
+    }
+
+    .panel-button {
+      background: #27ae60; 
+      margin: 0px 15px;
+    }
+
+    .note-panel-content {
+      margin: 10px 20px;
+      color: #000000; 
+    }
+
+  }
+}
+
+/* DASHBOARD TOGGLE ADD */
+
+#add_form .task-button {
+  display: block;
+  margin-top: 10px;
+}

@@ -1,0 +1,34 @@
+<%= bootstrap_form_for(@measurement) do |f| %>
+<% if @measurement.errors.any? %>
+<div id="error_explanation">
+  <h2><%= pluralize(@measurement.errors.count, "error") %> prohibited this measurement from being saved:</h2>
+
+  <ul>
+    <% @measurement.errors.full_messages.each do |message| %>
+    <li><%= message %></li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-5">
+      <%= f.date_select :date %>
+      <%= f.time_select :time %>
+      <%= f.text_field :weight %>
+      <%= f.text_field :waist_extended %>
+      <%= f.text_field :waist_normal %>
+      <%= f.text_field :hip %>
+      <%= f.text_field :chest %>
+      <%= f.text_field :bicep %>
+      <%= f.text_field :forearm %>
+      <%= f.text_field :calves %>
+      <%= f.text_field :thighs %>
+      <div class="actions">
+        <%= f.submit %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<div class="row">
+  <div class="pull-right">
+    <a class="btn btn-large btn-primary" type="button" href="<%= edit_note_path(@note.id) %>">Edit</a>
+  </div>
+</div>
+<p>
+  <h2><%= "#{@note.title}" %> [<%= "#{NoteCategory.find(@note.note_category_id).name}"%>]</h1>
+</p>
+
+<p>
+  <%= @note.content.html_safe %>
+</p>
+
+<p>
+  <strong>Last viewed:</strong>
+  <%= @note.last_viewed %>
+</p>
+
+<p>
+  <strong>Total views:</strong>
+  <%= @note.total_views %>
+</p>

@@ -1,0 +1,43 @@
+<% if @current_task == nil %>
+<h2>NO CURRENT TASK</h2>
+<% else %>
+<h2>Current Task: <%= @current_task.task_name %> (<%= getTimeDiff(@current_task.start_time, DateTime.now) %>)</h2>
+<% end %>
+
+<a type="button" class="btn btn-primary" id="toggle_add_form">Toggle Add</a>
+<div id="add_form">
+  <%= form_for(@active_task) do |f| %>
+  <% if @active_task.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@active_task.errors.count, "error") %> prohibited this active_task from being saved:</h2>
+
+    <ul>
+      <% @active_task.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :task_name %><br>
+      <%= f.text_field :task_name %>
+    </div>
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+    <%= getNoteHTML("instructions_tasks", "Task Instructions", true) %>
+    <div>
+      <h2>Premade</h2>
+      <% @premadeTasks.each do |task| %>
+      <%= createButton(task.name) %>
+      <% end %>
+
+      <h2>Recent</h2>
+      <% @historicTasks.each do |task| %>
+      <%= createButton(task.task_name) %>
+      <% end %>
+
+    </div>
+    <% end %>
+  </div>

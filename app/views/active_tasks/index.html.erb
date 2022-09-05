@@ -1,0 +1,40 @@
+<div class="row">
+  <div class="col-xs-12">
+      <a href="<%= premade_tasks_path %>" class="btn btn-primary">Premade Tasks</a>
+    <div class="table-responsive">
+      <table class="table centered-contents">
+        <thead>
+          <tr>
+            <th>Start Time</th>
+            <th>Duration</th>
+            <th>Task</th>
+            <th colspan="2"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @nextStartTime = nil %>
+          <% @active_tasks.each do |activeTask| %>
+          <tr>
+            <td><%= activeTask.start_time %></td>
+            <td>
+            <% if @nextStartTime %>
+              <%= getTimeDiff(activeTask.start_time, @nextStartTime) %>
+            <% else %>
+              N/A
+            <% end %>
+          </td>
+
+            <% @nextStartTime = activeTask.start_time %>
+            <td><%= activeTask.task_name %></td>
+            <td><%= link_to 'Edit', edit_active_task_path(activeTask) %></td>
+            <td><%= link_to 'Destroy', activeTask, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+
+    </div>
+  </div>
+</div>

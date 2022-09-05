@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>DayLog - <%= @title %></title>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %>
+    <meta name="viewport" content="width=device-width, initial-scale=1" >
+    </head>
+    <body>
+      <!-- Static navbar -->
+      <div class="navbar navbar-default navbar-static-top" id="header-nav" role="navigation">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">DayLog</a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/dashboard">Dashboard</a></li>
+              <li><a href="/measurements">Measurements</a></li>
+              <li><a href="/thoughts">Thoughts</a></li>
+
+              <li><a href="/notes">Notes</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tasks <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="/active_tasks">Active</a></li>
+                  <li><a href="/task_history">History</a></li>
+                </ul>
+              </li>
+              <li><a href="/meals">Meals</a></li>
+              <li><a href="/pills">Pills</a></li>
+              <li><a href="/exercises">Exercise</a></li>
+              <li><a href="/hygiene_actions">Hygiene</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+
+      <div class="container-fluid page-title-fw-bg">
+        <!-- TITLE -->
+        <div class="container">
+          <h1><%= @title %></h1>
+        </div>
+      </div> <!-- /container -->
+    </div>
+
+    <div class="container page-content-wrapper">
+      <%= yield %>
+    </div>
+
+  </body>
+</html>

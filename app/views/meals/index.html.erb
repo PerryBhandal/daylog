@@ -1,0 +1,37 @@
+<div class="row">
+  <div class="pull-right">
+    <a class="btn btn-large btn-primary" type="button" href="<%= new_meal_path %>">New</a>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-12">
+    <div class="table-responsive">
+      <table class="table centered-contents">
+        <thead>
+          <tr>
+            <th>Eaten At</th>
+            <th>Quality</th>
+            <th>Contents</th>
+            <th>Comments</th>
+            <th colspan="2"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @meals.each do |meal| %>
+          <tr>
+            <td><%=  meal.eaten_at %></td>
+            <td><%=  getMealQuality(meal.meal_quality) %></td>
+            <td><%=  meal.meal_contents %></td>
+            <td><%=  meal.comments %></td>
+            <td><%= link_to 'Edit', edit_meal_path(meal) %></td>
+            <td><%= link_to 'Destroy', meal, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+<%= bootstrap_form_for(@meal) do |f| %>
+<% if @meal.errors.any? %>
+<div id="error_explanation">
+  <h2><%= pluralize(@meal.errors.count, "error") %> prohibited this meal from being saved:</h2>
+
+  <ul>
+    <% @meal.errors.full_messages.each do |message| %>
+    <li><%= message %></li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
+
+<%= f.datetime_select :eaten_at %>
+
+<select id="meal_quality" name="meal[meal_quality]">
+
+  <% 0.upto(4) do |mealNum| %>
+  <% if @meal.id == mealNum %>
+  <option value="<%= mealNum %>" selected="selected"><%= getMealQuality(mealNum) %></option>
+  <% else %>
+  <option value="<%= mealNum %>"><%= getMealQuality(mealNum) %></option>
+  <% end %>
+  <% end %>
+
+</select>
+
+
+<%= f.text_area :meal_contents %>
+<%= f.text_area :comments %>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

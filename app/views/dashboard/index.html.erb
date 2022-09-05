@@ -1,0 +1,8 @@
+<%= render 'active_task_widget' %>
+<a type="button" class="btn btn-primary" id="add-thought-button" href="<%= new_thought_path %>">Add Thought</a>
+
+<%= renderTaskGroup(getTaskGroups[-1]) %> 
+
+<%= getNoteHTML("dashboard_inspiration", "Inspiration", true) %>
+<%= getNoteHTML("dashboard_goals", "Goals", false) %>
+<%= getNoteHTML("To Do", "To Do", false) %>

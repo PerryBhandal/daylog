@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Consumed at:</strong>
+  <%= @pill.consumed_at %>
+</p>
+
+<p>
+  <strong>Pill name:</strong>
+  <%= @pill.pill_name %>
+</p>
+
+<p>
+  <strong>Quantity:</strong>
+  <%= @pill.quantity %>
+</p>
+
+<%= link_to 'Edit', edit_pill_path(@pill) %> |
+<%= link_to 'Back', pills_path %>

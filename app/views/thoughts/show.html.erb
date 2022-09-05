@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Time added:</strong>
+  <%= @thought.time_added %>
+</p>
+
+<p>
+  <strong>Thought:</strong>
+  <%= @thought.thought %>
+</p>
+
+<%= link_to 'Edit', edit_thought_path(@thought) %> |
+<%= link_to 'Back', thoughts_path %>

@@ -1,0 +1,22 @@
+<div class="container-fluid panel-wrapper">
+  <div class="row panel-segment">
+    <div class="note-panel-header panel-header-collapse">
+      <%= @title %>
+
+      <div class="pull-right">
+        <a href="<%= edit_note_path(@note.id) %>" class="btn btn-primary panel-button panel-header-edit">Edit</a>
+      </div>
+    </div>
+  </div>
+
+  <% if @startCollapsed %>
+  <div class="row panel-segment note-panel-content-row collapsed-row">
+  <% else %>
+  <div class="row panel-segment note-panel-content-row">
+  <% end %>
+    <div class="note-panel-content">
+      <%= @content.html_safe %>
+    </div>
+  </div>
+</div>
+

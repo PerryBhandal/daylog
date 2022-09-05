@@ -1,0 +1,51 @@
+<div class="row">
+  <div class="pull-right">
+    <a class="btn btn-large btn-primary" type="button" href="<%= new_measurement_path %>">New</a>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-12">
+    <div class="table-responsive">
+      <table class="table centered-contents">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Weight</th>
+            <th>Waist extended</th>
+            <th>Waist normal</th>
+            <th>Hip</th>
+            <th>Chest</th>
+            <th>Bicep</th>
+            <th>Forearm</th>
+            <th>Calves</th>
+            <th>Thighs</th>
+            <th colspan="2"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @measurements.each do |measurement| %>
+          <tr>
+            <td><%= measurement.date %></td>
+            <td><%= "#{measurement.time.hour.to_s.rjust(2, '0')}:#{measurement.time.min.to_s.rjust(2, '0')}" %></td>
+            <td><%= measurement.weight %></td>
+            <td><%= measurement.waist_extended %></td>
+            <td><%= measurement.waist_normal %></td>
+            <td><%= measurement.hip %></td>
+            <td><%= measurement.chest %></td>
+            <td><%= measurement.bicep %></td>
+            <td><%= measurement.forearm %></td>
+            <td><%= measurement.calves %></td>
+            <td><%= measurement.thighs %></td>
+            <td><%= link_to 'Edit', edit_measurement_path(measurement) %></td>
+            <td><%= link_to 'Destroy', measurement, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>

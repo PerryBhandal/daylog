@@ -1,0 +1,31 @@
+<%= bootstrap_form_for(@note) do |f| %>
+  <% if @note.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@note.errors.count, "error") %> prohibited this note from being saved:</h2>
+
+      <ul>
+      <% @note.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <select id="note_category_id" name="note[note_category_id]">
+  <% NoteCategory.all.each do |noteCat| %>
+    <% if @note.note_category_id == noteCat.id %>
+      <option value="<%= noteCat.id %>" selected="selected"><%= noteCat.name %></option>
+    <% else %>
+     <option value="<%= noteCat.id %>"><%= noteCat.name %></option>
+    <% end %>
+  <% end %>
+</select>
+
+
+
+    <%= f.text_field :title %>
+    <%= f.text_area :content, :class => 'ckeditor' %>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

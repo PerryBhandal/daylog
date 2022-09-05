@@ -1,0 +1,21 @@
+<%= form_for(@premade_task) do |f| %>
+  <% if @premade_task.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@premade_task.errors.count, "error") %> prohibited this premade_task from being saved:</h2>
+
+      <ul>
+      <% @premade_task.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

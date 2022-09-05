@@ -1,0 +1,44 @@
+<div class="container-fluid panel-wrapper">
+  <div class="row panel-segment">
+    <div class="note-panel-header panel-header-collapse">
+      <%= "Daily Summary" %>
+    </div>
+  </div>
+
+  <div class="row panel-segment note-panel-content-row collapsed-row">
+    <div class="note-panel-content">
+      <h2>Wake Time</h2>
+      <div>Woke: <%= @wakeTime.to_s %></div>
+      <div>Slept: <%= getTimeString(@sleepTime) %></div>
+      <div>Time Awake: <%= @timeAwake %></div>
+
+      <h2>Time Breakdown</h2>
+
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="table-responsive">
+            <table class="table centered-contents">
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Duration</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <% @taskBreakdown.each do |category| %>
+                  <tr>
+                    <td><%= category[0] %></td>
+                    <td><%= category[1] %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
