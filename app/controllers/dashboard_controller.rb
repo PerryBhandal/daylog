@@ -26,6 +26,7 @@ class DashboardController < ApplicationController
     allTasks = ActiveTask.all.order('start_time DESC').select(:task_name).uniq()
     allTasks.each do |task|
       if PremadeTask.where(:name => task.task_name).count == 0 and !(taskList.include?(task))
+        taskList.pop(task)
         taskList.push(task)
       end
     end
