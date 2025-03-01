@@ -154,13 +154,15 @@
                 <h4 class="list-group-item-heading">
                   <%= exercise.exercise_type %>
                   <small class="text-muted pull-right">
-                    <%= exercise.performed_at.strftime("%b %d, %I:%M %p") %>
+                    <%= exercise.exercised_at.strftime("%b %d, %I:%M %p") %>
                   </small>
                 </h4>
                 <p class="list-group-item-text">
-                  <strong>Duration:</strong> <%= exercise.duration %> minutes
+                  <% if exercise.description.present? %>
+                    <strong>Description:</strong> <%= exercise.description %><br>
+                  <% end %>
                   <% if exercise.comments.present? %>
-                    <br><strong>Comments:</strong> <%= truncate(exercise.comments, length: 100) %>
+                    <strong>Comments:</strong> <%= truncate(exercise.comments, length: 100) %>
                   <% end %>
                 </p>
                 <div class="btn-group btn-group-xs pull-right" style="margin-top: 10px;">

@@ -51,7 +51,7 @@ class DashboardController < ApplicationController
   
   # Get the most recent exercises for the dashboard
   def getMostRecentExercises
-    Exercise.order('performed_at DESC').limit(3)
+    Exercise.order('exercised_at DESC').limit(3)
   end
   
   # Get the most recent thoughts for the dashboard
