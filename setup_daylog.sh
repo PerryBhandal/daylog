@@ -45,6 +45,8 @@ fi
 
 # Install Ruby 2.3.3
 echo "=== Installing Ruby 2.3.3 (this may take a while) ==="
+# Skip documentation generation to avoid Marshal.dump error
+export RUBY_CONFIGURE_OPTS="--disable-install-doc"
 rbenv install -s 2.3.3
 rbenv global 2.3.3
 
