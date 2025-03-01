@@ -82,10 +82,6 @@
 
 <script>
   $(document).ready(function() {
-    $('#toggle_add_form').click(function() {
-      $('#add_form').slideToggle();
-    });
-    
     // Auto-update the task timer every minute
     <% if @current_task != nil %>
       setInterval(function() {

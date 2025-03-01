@@ -63,8 +63,10 @@ $(document).ready(function() {
     
     if ($form.is(':visible')) {
       $(this).html('<i class="fa fa-plus"></i> Change Task');
+      $form.slideUp();
     } else {
       $(this).html('<i class="fa fa-times"></i> Cancel');
+      $form.slideDown();
     }
   });
 });
