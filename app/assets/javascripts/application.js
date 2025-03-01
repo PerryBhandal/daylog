@@ -40,10 +40,6 @@ $(document).ready(function() {
     $(this).parents('.panel-wrapper').find('.note-panel-content-row').toggle();
   });
 
-  // Show leisure modal
-  $('#leisure-modal').modal({backdrop: 'static'});
-  $('#leisure-modal').modal('show');
-  
   // Initialize all tooltips
   if (typeof $.fn.tooltip !== 'undefined') {
     $('[data-toggle="tooltip"]').tooltip();
