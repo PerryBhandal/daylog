@@ -66,7 +66,7 @@ $(document).ready(function() {
       $form.slideDown();
     } else {
       $(this).html('<i class="fa fa-times"></i> Cancel');
-      $form.slideDown();
+      $form.slideUp();
     }
   });
 });
