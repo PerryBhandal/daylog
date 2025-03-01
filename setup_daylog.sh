@@ -64,9 +64,16 @@ echo "=== Setting up the application directory ==="
 if [ ! -d "daylog" ]; then
   # Check if SOURCE_DIR is provided
   if [ -z "$SOURCE_DIR" ]; then
-    echo "No source directory specified. Please provide the path to the daylog repository."
-    echo "Usage: SOURCE_DIR=/path/to/daylog ./setup_daylog.sh"
-    exit 1
+    # Check if we're running from within the daylog repository
+    SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+    if [[ "$SCRIPT_DIR" == */daylog* ]] || [[ -f "$SCRIPT_DIR/Gemfile" && -d "$SCRIPT_DIR/app" ]]; then
+      echo "Running from within the daylog repository. Using current directory as source."
+      SOURCE_DIR="$SCRIPT_DIR"
+    else
+      echo "No source directory specified. Please provide the path to the daylog repository."
+      echo "Usage: SOURCE_DIR=/path/to/daylog ./setup_daylog.sh"
+      exit 1
+    fi
   fi
   
   # Copy from the source directory
