@@ -1,29 +1,37 @@
 <h1>Listing pills</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Consumed at</th>
-      <th>Pill name</th>
-      <th>Quantity</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<div class="row">
+  <div class="pull-right">
+    <a class="btn btn-large btn-primary" type="button" href="<%= new_pill_path %>">New</a>
+  </div>
+</div>
 
-  <tbody>
-    <% @pills.each do |pill| %>
-      <tr>
-        <td><%= pill.consumed_at %></td>
-        <td><%= pill.pill_name %></td>
-        <td><%= pill.quantity %></td>
-        <td><%= link_to 'Show', pill %></td>
-        <td><%= link_to 'Edit', edit_pill_path(pill) %></td>
-        <td><%= link_to 'Destroy', pill, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="row">
+  <div class="col-xs-12">
+    <div class="table-responsive">
+      <table class="table centered-contents">
+        <thead>
+          <tr>
+            <th>Consumed at</th>
+            <th>Pill name</th>
+            <th>Quantity</th>
+            <th colspan="3"></th>
+          </tr>
+        </thead>
 
-<br>
-
-<%= link_to 'New Pill', new_pill_path %>
+        <tbody>
+          <% @pills.each do |pill| %>
+          <tr>
+            <td><%= pill.consumed_at %></td>
+            <td><%= pill.pill_name %></td>
+            <td><%= pill.quantity %></td>
+            <td><%= link_to 'Show', pill %></td>
+            <td><%= link_to 'Edit', edit_pill_path(pill) %></td>
+            <td><%= link_to 'Destroy', pill, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
