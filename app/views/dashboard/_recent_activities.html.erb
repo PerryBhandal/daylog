@@ -41,13 +41,13 @@
             <% @recent_thoughts.each do |thought| %>
               <div class="list-group-item">
                 <h4 class="list-group-item-heading">
-                  <%= thought.title %>
+                  Thought
                   <small class="text-muted pull-right">
-                    <%= thought.created_at.strftime("%b %d, %I:%M %p") %>
+                    <%= thought.time_added ? thought.time_added.strftime("%b %d, %I:%M %p") : thought.created_at.strftime("%b %d, %I:%M %p") %>
                   </small>
                 </h4>
                 <p class="list-group-item-text">
-                  <%= truncate(thought.content, length: 100) %>
+                  <%= truncate(thought.thought, length: 100) %>
                 </p>
                 <div class="btn-group btn-group-xs pull-right" style="margin-top: 10px;">
                   <a href="<%= thought_path(thought) %>" class="btn btn-default">
