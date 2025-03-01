@@ -1,22 +1,28 @@
-<div class="container-fluid panel-wrapper">
-  <div class="row panel-segment">
-    <div class="note-panel-header panel-header-collapse">
-      <%= @title %>
-
+<div class="panel panel-default note-panel">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <i class="fa fa-sticky-note-o"></i> <%= @title %>
       <div class="pull-right">
-        <a href="<%= edit_note_path(@note.id) %>" class="btn btn-primary panel-button panel-header-edit">Edit</a>
+        <a href="<%= edit_note_path(@note.id) %>" class="btn btn-xs btn-primary">
+          <i class="fa fa-pencil"></i> Edit
+        </a>
+        <button type="button" class="btn btn-xs btn-default note-toggle">
+          <i class="fa fa-chevron-<%= @startCollapsed ? 'down' : 'up' %>"></i>
+        </button>
       </div>
-    </div>
+    </h3>
   </div>
-
-  <% if @startCollapsed %>
-  <div class="row panel-segment note-panel-content-row collapsed-row">
-  <% else %>
-  <div class="row panel-segment note-panel-content-row">
-  <% end %>
-    <div class="note-panel-content">
-      <%= @content.html_safe %>
-    </div>
+  
+  <div class="panel-body note-content" <%= 'style="display: none;"' if @startCollapsed %>>
+    <%= @content.html_safe %>
   </div>
 </div>
 
+<script>
+  $(document).ready(function() {
+    $('.note-toggle').click(function() {
+      $(this).find('i').toggleClass('fa-chevron-down fa-chevron-up');
+      $(this).closest('.panel').find('.note-content').slideToggle();
+    });
+  });
+</script>

@@ -1,40 +1,78 @@
-<div class="container-fluid panel-wrapper">
-  <div class="row panel-segment">
-    <div class="note-panel-header panel-header-collapse">
-      <%= "Daily Summary" %>
-    </div>
+<div class="panel panel-info daily-summary-panel">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <i class="fa fa-calendar-check-o"></i> Daily Summary
+      <div class="pull-right">
+        <button type="button" class="btn btn-xs btn-default panel-toggle">
+          <i class="fa fa-chevron-down"></i>
+        </button>
+      </div>
+    </h3>
   </div>
-
-  <div class="row panel-segment note-panel-content-row collapsed-row">
-    <div class="note-panel-content">
-      <h2>Wake Time</h2>
-      <div>Woke: <%= @wakeTime.to_s %></div>
-      <div>Slept: <%= getTimeString(@sleepTime) %></div>
-      <div>Time Awake: <%= @timeAwake %></div>
-
-      <h2>Time Breakdown</h2>
-
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="table-responsive">
-            <table class="table centered-contents">
-              <thead>
-                <tr>
-                  <th>Category</th>
-                  <th>Duration</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <% @taskBreakdown.each do |category| %>
+  
+  <div class="panel-body daily-summary-content">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="day-stats-card">
+          <h4><i class="fa fa-sun-o"></i> Day Overview</h4>
+          <div class="day-stats">
+            <div class="stat-item">
+              <span class="stat-label">Woke:</span>
+              <span class="stat-value"><%= @wakeTime.strftime("%I:%M %p") %></span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Slept:</span>
+              <span class="stat-value"><%= @sleepTime ? @sleepTime.strftime("%I:%M %p") : "Not yet" %></span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Time Awake:</span>
+              <span class="stat-value"><%= @timeAwake %></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-8">
+        <h4><i class="fa fa-pie-chart"></i> Time Breakdown</h4>
+        <div class="row">
+          <div class="col-md-7">
+            <div class="table-responsive">
+              <table class="table table-striped table-condensed">
+                <thead>
                   <tr>
-                    <td><%= category[0] %></td>
-                    <td><%= category[1] %></td>
+                    <th>Category</th>
+                    <th>Duration</th>
+                    <th>%</th>
                   </tr>
-                <% end %>
-              </tbody>
-            </table>
-
+                </thead>
+                <tbody>
+                  <% 
+                    total_time = 0
+                    @taskBreakdown.each do |category|
+                      hours, minutes = category[1].split(':').map(&:to_i)
+                      total_time += hours * 60 + minutes
+                    end
+                  %>
+                  <% @taskBreakdown.each do |category| %>
+                    <% 
+                      hours, minutes = category[1].split(':').map(&:to_i)
+                      category_minutes = hours * 60 + minutes
+                      percentage = total_time > 0 ? ((category_minutes.to_f / total_time) * 100).round : 0
+                    %>
+                    <tr>
+                      <td><%= category[0] %></td>
+                      <td><%= category[1] %></td>
+                      <td><%= percentage %>%</td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-md-5">
+            <div class="chart-container">
+              <canvas id="timeBreakdownChart" width="200" height="200"></canvas>
+            </div>
           </div>
         </div>
       </div>
@@ -42,3 +80,74 @@
   </div>
 </div>
 
+<script>
+  $(document).ready(function() {
+    // Toggle panel content
+    $('.panel-toggle').click(function() {
+      $(this).find('i').toggleClass('fa-chevron-down fa-chevron-up');
+      $('.daily-summary-content').slideToggle();
+    });
+    
+    // Create pie chart for time breakdown
+    var ctx = document.getElementById('timeBreakdownChart').getContext('2d');
+    var data = {
+      labels: [<% @taskBreakdown.each_with_index do |category, index| %>
+                '<%= category[0] %>'<%= index < @taskBreakdown.length - 1 ? ',' : '' %>
+              <% end %>],
+      datasets: [{
+        data: [<% 
+          total_time = 0
+          @taskBreakdown.each do |category|
+            hours, minutes = category[1].split(':').map(&:to_i)
+            total_time += hours * 60 + minutes
+          end
+          
+          @taskBreakdown.each_with_index do |category, index|
+            hours, minutes = category[1].split(':').map(&:to_i)
+            category_minutes = hours * 60 + minutes
+            percentage = total_time > 0 ? ((category_minutes.to_f / total_time) * 100).round : 0
+        %><%= percentage %><%= index < @taskBreakdown.length - 1 ? ',' : '' %><% end %>],
+        backgroundColor: [
+          '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#8AC249'
+        ]
+      }]
+    };
+    
+    // Check if Chart.js is loaded
+    if (typeof Chart !== 'undefined') {
+      new Chart(ctx, {
+        type: 'pie',
+        data: data,
+        options: {
+          responsive: true,
+          legend: {
+            position: 'bottom',
+            labels: {
+              boxWidth: 12
+            }
+          }
+        }
+      });
+    } else {
+      // If Chart.js is not loaded, load it dynamically
+      var script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js';
+      script.onload = function() {
+        new Chart(ctx, {
+          type: 'pie',
+          data: data,
+          options: {
+            responsive: true,
+            legend: {
+              position: 'bottom',
+              labels: {
+                boxWidth: 12
+              }
+            }
+          }
+        });
+      };
+      document.head.appendChild(script);
+    }
+  });
+</script>

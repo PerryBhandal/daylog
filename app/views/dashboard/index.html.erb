@@ -1,8 +1,85 @@
-<%= render 'active_task_widget' %>
-<a type="button" class="btn btn-primary" id="add-thought-button" href="<%= new_thought_path %>">Add Thought</a>
+<div class="dashboard-container">
+  <!-- Header with date and time -->
+  <div class="row dashboard-header">
+    <div class="col-md-6">
+      <h1><i class="fa fa-dashboard"></i> Dashboard</h1>
+      <div class="current-date-time" id="current-date-time">
+        <%= Time.now.strftime("%A, %B %d, %Y") %>
+      </div>
+    </div>
+    <div class="col-md-6 text-right">
+      <div class="quick-actions">
+        <a href="<%= new_thought_path %>" class="btn btn-primary btn-sm" data-toggle="tooltip" title="Record a new thought">
+          <i class="fa fa-lightbulb-o"></i> Add Thought
+        </a>
+        <a href="<%= new_meal_path %>" class="btn btn-success btn-sm" data-toggle="tooltip" title="Log a meal you've eaten">
+          <i class="fa fa-cutlery"></i> Log Meal
+        </a>
+        <a href="<%= new_pill_path %>" class="btn btn-info btn-sm" data-toggle="tooltip" title="Record medication taken">
+          <i class="fa fa-medkit"></i> Log Pill
+        </a>
+        <a href="<%= new_exercise_path %>" class="btn btn-warning btn-sm" data-toggle="tooltip" title="Record physical activity">
+          <i class="fa fa-heartbeat"></i> Log Exercise
+        </a>
+      </div>
+    </div>
+  </div>
 
-<%= renderTaskGroup(getTaskGroups[-1]) %> 
+  <!-- Main content area -->
+  <div class="row dashboard-content">
+    <!-- Left column -->
+    <div class="col-md-8">
+      <!-- Active task widget -->
+      <div class="dashboard-widget">
+        <%= render 'active_task_widget' %>
+      </div>
+      
+      <!-- Daily summary -->
+      <div class="dashboard-widget">
+        <%= renderTaskGroup(getTaskGroups[-1]) %>
+      </div>
+      
+      <!-- Recent activities -->
+      <div class="dashboard-widget">
+        <%= render 'recent_activities' %>
+      </div>
+    </div>
+    
+    <!-- Right column -->
+    <div class="col-md-4">
+      <!-- Notes widgets -->
+      <div class="dashboard-widget">
+        <%= getNoteHTML("To Do", "To Do", false) %>
+      </div>
+      
+      <div class="dashboard-widget">
+        <%= getNoteHTML("dashboard_goals", "Goals", false) %>
+      </div>
+      
+      <div class="dashboard-widget">
+        <%= getNoteHTML("dashboard_inspiration", "Inspiration", true) %>
+      </div>
+    </div>
+  </div>
+</div>
 
-<%= getNoteHTML("dashboard_inspiration", "Inspiration", true) %>
-<%= getNoteHTML("dashboard_goals", "Goals", false) %>
-<%= getNoteHTML("To Do", "To Do", false) %>
+<%= render 'leisure_modal' %>
+
+<script>
+  // Update the current time every minute
+  function updateDateTime() {
+    var now = new Date();
+    var options = { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    };
+    document.getElementById('current-date-time').innerHTML = now.toLocaleDateString('en-US', options);
+  }
+  
+  setInterval(updateDateTime, 60000); // Update every minute
+  updateDateTime(); // Initial update
+</script>

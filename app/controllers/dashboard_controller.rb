@@ -4,6 +4,10 @@ class DashboardController < ApplicationController
     @active_task = ActiveTask.new
     @premadeTasks = PremadeTask.all.order('name ASC')
     @historicTasks = getHistoricTasks
+    @recent_meals = getMostRecentMeals
+    @recent_pills = getMostRecentPills
+    @recent_exercises = getMostRecentExercises
+    @recent_thoughts = getMostRecentThoughts
   end
 
   protected
@@ -17,8 +21,6 @@ class DashboardController < ApplicationController
   def getCurrentTask
     @current_task = ActiveTask.last
   end
-
-  private
 
   def getHistoricTasks
     taskList = []
@@ -35,5 +37,25 @@ class DashboardController < ApplicationController
     end
 
     taskList
+  end
+  
+  # Get the most recent meals for the dashboard
+  def getMostRecentMeals
+    Meal.order('eaten_at DESC').limit(3)
+  end
+  
+  # Get the most recent pills for the dashboard
+  def getMostRecentPills
+    Pill.order('consumed_at DESC').limit(3)
+  end
+  
+  # Get the most recent exercises for the dashboard
+  def getMostRecentExercises
+    Exercise.order('performed_at DESC').limit(3)
+  end
+  
+  # Get the most recent thoughts for the dashboard
+  def getMostRecentThoughts
+    Thought.order('created_at DESC').limit(3)
   end
 end

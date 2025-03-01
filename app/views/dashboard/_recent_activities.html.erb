@@ -1,0 +1,198 @@
+<div class="panel panel-default recent-activities-panel">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <i class="fa fa-history"></i> Recent Activities
+      <div class="pull-right">
+        <button type="button" class="btn btn-xs btn-default panel-toggle">
+          <i class="fa fa-chevron-up"></i>
+        </button>
+      </div>
+    </h3>
+  </div>
+  
+  <div class="panel-body">
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active">
+        <a href="#recent-thoughts" aria-controls="recent-thoughts" role="tab" data-toggle="tab">
+          <i class="fa fa-lightbulb-o"></i> Thoughts
+        </a>
+      </li>
+      <li role="presentation">
+        <a href="#recent-meals" aria-controls="recent-meals" role="tab" data-toggle="tab">
+          <i class="fa fa-cutlery"></i> Meals
+        </a>
+      </li>
+      <li role="presentation">
+        <a href="#recent-pills" aria-controls="recent-pills" role="tab" data-toggle="tab">
+          <i class="fa fa-medkit"></i> Pills
+        </a>
+      </li>
+      <li role="presentation">
+        <a href="#recent-exercises" aria-controls="recent-exercises" role="tab" data-toggle="tab">
+          <i class="fa fa-heartbeat"></i> Exercises
+        </a>
+      </li>
+    </ul>
+    
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="recent-thoughts">
+        <% if @recent_thoughts.any? %>
+          <div class="list-group">
+            <% @recent_thoughts.each do |thought| %>
+              <div class="list-group-item">
+                <h4 class="list-group-item-heading">
+                  <%= thought.title %>
+                  <small class="text-muted pull-right">
+                    <%= thought.created_at.strftime("%b %d, %I:%M %p") %>
+                  </small>
+                </h4>
+                <p class="list-group-item-text">
+                  <%= truncate(thought.content, length: 100) %>
+                </p>
+                <div class="btn-group btn-group-xs pull-right" style="margin-top: 10px;">
+                  <a href="<%= thought_path(thought) %>" class="btn btn-default">
+                    <i class="fa fa-eye"></i> View
+                  </a>
+                  <a href="<%= edit_thought_path(thought) %>" class="btn btn-primary">
+                    <i class="fa fa-pencil"></i> Edit
+                  </a>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <div class="text-center">
+            <a href="<%= thoughts_path %>" class="btn btn-default btn-sm">
+              <i class="fa fa-list"></i> View All Thoughts
+            </a>
+          </div>
+        <% else %>
+          <div class="alert alert-info">
+            <i class="fa fa-info-circle"></i> No recent thoughts found.
+            <a href="<%= new_thought_path %>" class="alert-link">Add a thought</a>
+          </div>
+        <% end %>
+      </div>
+      
+      <div role="tabpanel" class="tab-pane" id="recent-meals">
+        <% if @recent_meals.any? %>
+          <div class="list-group">
+            <% @recent_meals.each do |meal| %>
+              <div class="list-group-item">
+                <h4 class="list-group-item-heading">
+                  <%= meal.meal_contents %>
+                  <small class="text-muted pull-right">
+                    <%= meal.eaten_at.strftime("%b %d, %I:%M %p") %>
+                  </small>
+                </h4>
+                <p class="list-group-item-text">
+                  <strong>Quality:</strong> <%= getMealQuality(meal.meal_quality) %>
+                  <% if meal.comments.present? %>
+                    <br><strong>Comments:</strong> <%= truncate(meal.comments, length: 100) %>
+                  <% end %>
+                </p>
+                <div class="btn-group btn-group-xs pull-right" style="margin-top: 10px;">
+                  <a href="<%= edit_meal_path(meal) %>" class="btn btn-primary">
+                    <i class="fa fa-pencil"></i> Edit
+                  </a>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <div class="text-center">
+            <a href="<%= meals_path %>" class="btn btn-default btn-sm">
+              <i class="fa fa-list"></i> View All Meals
+            </a>
+          </div>
+        <% else %>
+          <div class="alert alert-info">
+            <i class="fa fa-info-circle"></i> No recent meals found.
+            <a href="<%= new_meal_path %>" class="alert-link">Log a meal</a>
+          </div>
+        <% end %>
+      </div>
+      
+      <div role="tabpanel" class="tab-pane" id="recent-pills">
+        <% if @recent_pills.any? %>
+          <div class="list-group">
+            <% @recent_pills.each do |pill| %>
+              <div class="list-group-item">
+                <h4 class="list-group-item-heading">
+                  <%= pill.pill_name %>
+                  <small class="text-muted pull-right">
+                    <%= pill.consumed_at.strftime("%b %d, %I:%M %p") %>
+                  </small>
+                </h4>
+                <p class="list-group-item-text">
+                  <strong>Quantity:</strong> <%= pill.quantity %>
+                </p>
+                <div class="btn-group btn-group-xs pull-right" style="margin-top: 10px;">
+                  <a href="<%= edit_pill_path(pill) %>" class="btn btn-primary">
+                    <i class="fa fa-pencil"></i> Edit
+                  </a>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <div class="text-center">
+            <a href="<%= pills_path %>" class="btn btn-default btn-sm">
+              <i class="fa fa-list"></i> View All Pills
+            </a>
+          </div>
+        <% else %>
+          <div class="alert alert-info">
+            <i class="fa fa-info-circle"></i> No recent pills found.
+            <a href="<%= new_pill_path %>" class="alert-link">Log a pill</a>
+          </div>
+        <% end %>
+      </div>
+      
+      <div role="tabpanel" class="tab-pane" id="recent-exercises">
+        <% if @recent_exercises.any? %>
+          <div class="list-group">
+            <% @recent_exercises.each do |exercise| %>
+              <div class="list-group-item">
+                <h4 class="list-group-item-heading">
+                  <%= exercise.exercise_type %>
+                  <small class="text-muted pull-right">
+                    <%= exercise.performed_at.strftime("%b %d, %I:%M %p") %>
+                  </small>
+                </h4>
+                <p class="list-group-item-text">
+                  <strong>Duration:</strong> <%= exercise.duration %> minutes
+                  <% if exercise.comments.present? %>
+                    <br><strong>Comments:</strong> <%= truncate(exercise.comments, length: 100) %>
+                  <% end %>
+                </p>
+                <div class="btn-group btn-group-xs pull-right" style="margin-top: 10px;">
+                  <a href="<%= edit_exercise_path(exercise) %>" class="btn btn-primary">
+                    <i class="fa fa-pencil"></i> Edit
+                  </a>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <div class="text-center">
+            <a href="<%= exercises_path %>" class="btn btn-default btn-sm">
+              <i class="fa fa-list"></i> View All Exercises
+            </a>
+          </div>
+        <% else %>
+          <div class="alert alert-info">
+            <i class="fa fa-info-circle"></i> No recent exercises found.
+            <a href="<%= new_exercise_path %>" class="alert-link">Log an exercise</a>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    // Toggle panel content
+    $('.recent-activities-panel .panel-toggle').click(function() {
+      $(this).find('i').toggleClass('fa-chevron-down fa-chevron-up');
+      $(this).closest('.panel').find('.panel-body').slideToggle();
+    });
+  });
+</script>

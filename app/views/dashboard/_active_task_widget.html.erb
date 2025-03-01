@@ -1,43 +1,102 @@
-<% if @current_task == nil %>
-<h2>NO CURRENT TASK</h2>
-<% else %>
-<h2>Current Task: <%= @current_task.task_name %> (<%= getTimeDiff(@current_task.start_time, DateTime.now) %>)</h2>
-<% end %>
-
-<a type="button" class="btn btn-primary" id="toggle_add_form">Toggle Add</a>
-<div id="add_form">
-  <%= form_for(@active_task) do |f| %>
-  <% if @active_task.errors.any? %>
-  <div id="error_explanation">
-    <h2><%= pluralize(@active_task.errors.count, "error") %> prohibited this active_task from being saved:</h2>
-
-    <ul>
-      <% @active_task.errors.full_messages.each do |message| %>
-      <li><%= message %></li>
+<div class="active-task-panel">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <i class="fa fa-tasks"></i> Active Task
+        <div class="pull-right">
+          <button type="button" class="btn btn-xs btn-default" id="toggle_add_form">
+            <i class="fa fa-plus"></i> Change Task
+          </button>
+        </div>
+      </h3>
+    </div>
+    <div class="panel-body">
+      <% if @current_task == nil %>
+        <div class="alert alert-warning">
+          <i class="fa fa-exclamation-triangle"></i> No active task. Start a new task below.
+        </div>
+      <% else %>
+        <div class="current-task-info">
+          <h3><%= @current_task.task_name %></h3>
+          <div class="task-timer">
+            <i class="fa fa-clock-o"></i> Running for: <span class="label label-primary"><%= getTimeDiff(@current_task.start_time, DateTime.now) %></span>
+            <div class="task-start-time">Started at: <%= @current_task.start_time.strftime("%I:%M %p") %></div>
+          </div>
+        </div>
       <% end %>
-    </ul>
+      
+      <div id="add_form" style="display: none;">
+        <hr>
+        <%= form_for(@active_task, html: { class: "form-horizontal" }) do |f| %>
+          <% if @active_task.errors.any? %>
+            <div class="alert alert-danger">
+              <h4><%= pluralize(@active_task.errors.count, "error") %> prohibited this task from being saved:</h4>
+              <ul>
+                <% @active_task.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <div class="form-group">
+            <div class="col-sm-12">
+              <%= f.text_field :task_name, class: "form-control", placeholder: "Enter task name..." %>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-12">
+              <%= f.submit "Start Task", class: "btn btn-success" %>
+            </div>
+          </div>
+          
+          <div class="task-buttons-container">
+            <div class="row">
+              <div class="col-md-6">
+                <h4><i class="fa fa-star"></i> Premade Tasks</h4>
+                <div class="premade-tasks">
+                  <% @premadeTasks.each do |task| %>
+                    <%= createButton(task.name) %>
+                  <% end %>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <h4><i class="fa fa-history"></i> Recent Tasks</h4>
+                <div class="recent-tasks">
+                  <% @historicTasks.each do |task| %>
+                    <%= createButton(task.task_name) %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+        
+        <div class="task-instructions">
+          <%= getNoteHTML("instructions_tasks", "Task Instructions", true) %>
+        </div>
+      </div>
+    </div>
   </div>
-  <% end %>
+</div>
 
-  <div class="field">
-    <%= f.label :task_name %><br>
-      <%= f.text_field :task_name %>
-    </div>
-    <div class="actions">
-      <%= f.submit %>
-    </div>
-    <%= getNoteHTML("instructions_tasks", "Task Instructions", true) %>
-    <div>
-      <h2>Premade</h2>
-      <% @premadeTasks.each do |task| %>
-      <%= createButton(task.name) %>
-      <% end %>
-
-      <h2>Recent</h2>
-      <% @historicTasks.each do |task| %>
-      <%= createButton(task.task_name) %>
-      <% end %>
-
-    </div>
+<script>
+  $(document).ready(function() {
+    $('#toggle_add_form').click(function() {
+      $('#add_form').slideToggle();
+    });
+    
+    // Auto-update the task timer every minute
+    <% if @current_task != nil %>
+      setInterval(function() {
+        var startTime = new Date("<%= @current_task.start_time.iso8601 %>");
+        var now = new Date();
+        var diffMs = now - startTime;
+        var diffMins = Math.floor(diffMs / 60000);
+        var hours = Math.floor(diffMins / 60);
+        var mins = diffMins % 60;
+        $('.task-timer .label').text(hours + ":" + (mins < 10 ? "0" : "") + mins);
+      }, 60000);
     <% end %>
-  </div>
+  });
+</script>
