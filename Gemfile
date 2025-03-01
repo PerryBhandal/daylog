@@ -3,7 +3,7 @@ ruby '2.3.3'
 #ruby-gemset=DayLog
 
 gem 'rails', '4.1.5'
-gem 'bootstrap-sass', '~> 3.2.0'
+gem 'bootstrap-sass', '~> 3.1.1'
 gem 'autoprefixer-rails', '~> 2.0.2.20140628'
 gem 'sprockets', '2.11.0'
 gem 'bcrypt-ruby', '3.1.2'

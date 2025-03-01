@@ -95,6 +95,8 @@ fi
 # Install gems
 echo "=== Installing gems ==="
 bundle install
+echo "=== Updating gems to resolve dependency conflicts ==="
+bundle update
 
 # Setup the database
 echo "=== Setting up the database ==="
