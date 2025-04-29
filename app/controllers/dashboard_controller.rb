@@ -9,11 +9,24 @@ class DashboardController < ApplicationController
     @recent_exercises = getMostRecentExercises
     @recent_thoughts = getMostRecentThoughts
   end
+  
+  def watch
+    getCurrentTask
+    @active_task = ActiveTask.new
+    @premadeTasks = PremadeTask.all.order('name ASC')
+    @historicTasks = getHistoricTasks
+    setWatchTitle
+    render layout: 'watch'
+  end
 
   protected
 
   def setTitle
     @title = "Dashboard"
+  end
+  
+  def setWatchTitle
+    @title = "Watch"
   end
 
   private

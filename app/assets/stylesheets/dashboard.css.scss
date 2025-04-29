@@ -164,3 +164,234 @@
     }
   }
 }
+
+// Apple Watch Interface Styles
+.watch-body {
+  background-color: #000;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.watch-wrapper {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.watch-container {
+  max-width: 320px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.watch-panel {
+  background-color: #000;
+  color: #fff;
+  border-radius: 38px;
+  padding: 20px 15px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.watch-no-task {
+  padding: 30px 0;
+  
+  p {
+    font-size: 20px;
+    margin: 0;
+    color: #999;
+  }
+}
+
+.watch-current-task {
+  padding: 15px 0;
+  
+  h1 {
+    font-size: 22px;
+    font-weight: 500;
+    margin: 0 0 15px 0;
+    word-wrap: break-word;
+  }
+  
+  .watch-timer {
+    font-size: 32px;
+    font-weight: 300;
+    margin: 15px 0;
+    color: #0af;
+  }
+  
+  .watch-start-time {
+    font-size: 14px;
+    color: #999;
+    margin-top: 10px;
+  }
+}
+
+.watch-task-form {
+  margin-top: 20px;
+}
+
+.watch-btn {
+  display: inline-block;
+  background-color: #0af;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  
+  &:hover, &:focus {
+    background-color: darken(#0af, 10%);
+    color: #fff;
+    text-decoration: none;
+  }
+}
+
+.watch-btn-primary {
+  background-color: #0af;
+}
+
+.watch-btn-secondary {
+  background-color: #666;
+  
+  &:hover, &:focus {
+    background-color: darken(#666, 10%);
+  }
+}
+
+.watch-form {
+  margin-top: 15px;
+}
+
+.watch-form-group {
+  margin-bottom: 15px;
+}
+
+.watch-input {
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: 20px;
+  border: none;
+  background-color: #222;
+  color: #fff;
+  font-size: 16px;
+  
+  &:focus {
+    outline: none;
+    background-color: #333;
+  }
+  
+  &::placeholder {
+    color: #999;
+  }
+}
+
+.watch-form-actions {
+  margin-bottom: 20px;
+  
+  .watch-btn {
+    margin: 0 5px;
+  }
+}
+
+.watch-quick-tasks {
+  margin-top: 20px;
+  
+  h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: #999;
+  }
+}
+
+.watch-task-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.watch-task-button {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 15px;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  
+  &:hover, &:focus {
+    background-color: #0af;
+  }
+}
+
+// Additional Apple Watch optimizations
+@media (max-width: 320px) {
+  .watch-panel {
+    padding: 15px 10px;
+    border-radius: 30px;
+  }
+  
+  .watch-current-task {
+    h1 {
+      font-size: 18px;
+    }
+    
+    .watch-timer {
+      font-size: 28px;
+    }
+    
+    .watch-start-time {
+      font-size: 12px;
+    }
+  }
+  
+  .watch-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+  
+  .watch-input {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+  
+  .watch-quick-tasks {
+    h3 {
+      font-size: 14px;
+    }
+  }
+  
+  .watch-task-button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}
+
+// Touch optimizations
+.watch-btn, .watch-task-button, .watch-input {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  touch-action: manipulation;
+}
+
+.watch-btn, .watch-task-button {
+  min-height: 44px; // Apple's recommended minimum touch target size
+}
+
+// Prevent text selection
+.watch-panel {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

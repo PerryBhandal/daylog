@@ -19,7 +19,9 @@ class ActiveTasksController < ApplicationController
 
     respond_to do |format|
       if @active_task.save
-        format.html { redirect_to "/dashboard", notice: 'Active task was successfully created.' }
+        # Check if the request came from the watch interface
+        redirect_path = params[:source] == 'watch' ? '/watch' : '/dashboard'
+        format.html { redirect_to redirect_path, notice: 'Active task was successfully created.' }
       else
         format.html { render :new }
       end

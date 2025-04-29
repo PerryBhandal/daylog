@@ -1,0 +1,94 @@
+<div class="watch-container">
+  <div class="watch-panel">
+    <% if @current_task == nil %>
+      <div class="watch-no-task">
+        <p>No active task</p>
+      </div>
+    <% else %>
+      <div class="watch-current-task">
+        <h1><%= @current_task.task_name %></h1>
+        <div class="watch-timer">
+          <span id="watch-time-display"><%= getTimeDiff(@current_task.start_time, DateTime.now) %></span>
+        </div>
+        <div class="watch-start-time">
+          Started: <%= @current_task.start_time.strftime("%I:%M %p") %>
+        </div>
+      </div>
+    <% end %>
+    
+    <div class="watch-task-form">
+      <button type="button" id="watch-new-task-btn" class="watch-btn">New Task</button>
+      
+      <div id="watch-task-form-container" style="display: none;">
+        <%= form_for(@active_task, html: { class: "watch-form" }) do |f| %>
+          <%= hidden_field_tag :source, 'watch' %>
+          <div class="watch-form-group">
+            <%= f.text_field :task_name, class: "watch-input", placeholder: "Task name", autocomplete: "off" %>
+          </div>
+          
+          <div class="watch-form-actions">
+            <%= f.submit "Start", class: "watch-btn watch-btn-primary" %>
+            <button type="button" id="watch-cancel-btn" class="watch-btn watch-btn-secondary">Cancel</button>
+          </div>
+          
+          <div class="watch-quick-tasks">
+            <h3>Quick Select</h3>
+            <div class="watch-task-buttons">
+              <% @premadeTasks.first(3).each do |task| %>
+                <button type="button" class="watch-task-button"><%= task.name %></button>
+              <% end %>
+              
+              <% @historicTasks.first(3).each do |task| %>
+                <button type="button" class="watch-task-button"><%= task.task_name %></button>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    // Update timer every second
+    <% if @current_task != nil %>
+      setInterval(function() {
+        var startTime = new Date("<%= @current_task.start_time.iso8601 %>");
+        var now = new Date();
+        var diffMs = now - startTime;
+        var diffSecs = Math.floor(diffMs / 1000);
+        var hours = Math.floor(diffSecs / 3600);
+        var minutes = Math.floor((diffSecs % 3600) / 60);
+        var seconds = diffSecs % 60;
+        
+        // Format with leading zeros
+        var timeString = 
+          (hours < 10 ? "0" : "") + hours + ":" + 
+          (minutes < 10 ? "0" : "") + minutes + ":" + 
+          (seconds < 10 ? "0" : "") + seconds;
+          
+        $('#watch-time-display').text(timeString);
+      }, 1000);
+    <% end %>
+    
+    // Show/hide task form
+    $('#watch-new-task-btn').click(function() {
+      $(this).hide();
+      $('#watch-task-form-container').show();
+      $('#active_task_task_name').focus();
+    });
+    
+    $('#watch-cancel-btn').click(function() {
+      $('#watch-task-form-container').hide();
+      $('#watch-new-task-btn').show();
+    });
+    
+    // Quick task selection
+    $('.watch-task-button').click(function() {
+      var taskName = $(this).text();
+      $('#active_task_task_name').val(taskName);
+      $('.new_active_task').submit();
+    });
+  });
+</script>
