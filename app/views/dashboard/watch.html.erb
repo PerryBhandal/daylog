@@ -23,8 +23,9 @@
     
     <div class="watch-task-form">
       <div class="watch-buttons-container">
-        <button type="button" id="watch-new-task-btn" class="watch-btn">New Task</button>
-        <button type="button" id="watch-new-thought-btn" class="watch-btn">New Thought</button>
+        <button type="button" id="watch-new-task-btn" class="watch-btn">Task</button>
+        <button type="button" id="watch-new-thought-btn" class="watch-btn">Thought</button>
+        <button type="button" id="watch-new-meal-btn" class="watch-btn">Meal</button>
       </div>
       
       <div id="watch-task-form-container" style="display: none;" class="watch-form-container">
@@ -65,6 +66,23 @@
           <div class="watch-form-actions">
             <%= f.submit "Save", class: "watch-btn watch-btn-primary" %>
             <button type="button" id="watch-cancel-thought-btn" class="watch-btn watch-btn-secondary">Cancel</button>
+          </div>
+        <% end %>
+      </div>
+      
+      <div id="watch-meal-form-container" style="display: none;" class="watch-form-container">
+        <%= form_for(Meal.new, html: { class: "watch-form" }) do |f| %>
+          <%= hidden_field_tag :source, 'watch' %>
+          <div class="watch-form-group">
+            <%= f.text_field :meal_contents, class: "watch-input", placeholder: "Meal contents", autocomplete: "off" %>
+          </div>
+          <%= f.hidden_field :eaten_at, value: DateTime.now %>
+          <%= f.hidden_field :meal_quality, value: 0 %> <!-- 0 = "Healthy" -->
+          <%= f.hidden_field :comments, value: "" %>
+          
+          <div class="watch-form-actions">
+            <%= f.submit "Save", class: "watch-btn watch-btn-primary" %>
+            <button type="button" id="watch-cancel-meal-btn" class="watch-btn watch-btn-secondary">Cancel</button>
           </div>
         <% end %>
       </div>
@@ -121,6 +139,18 @@
     
     $('#watch-cancel-thought-btn').click(function() {
       $('#watch-thought-form-container').hide();
+      $('.watch-buttons-container').show();
+    });
+    
+    // Show/hide meal form
+    $('#watch-new-meal-btn').click(function() {
+      $('.watch-buttons-container').hide();
+      $('#watch-meal-form-container').show();
+      $('#meal_meal_contents').focus();
+    });
+    
+    $('#watch-cancel-meal-btn').click(function() {
+      $('#watch-meal-form-container').hide();
       $('.watch-buttons-container').show();
     });
     

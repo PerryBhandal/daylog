@@ -23,7 +23,11 @@ class MealsController < ApplicationController
 
     respond_to do |format|
       if @meal.save
-        format.html { redirect_to meals_url, notice: 'Meal was successfully created.' }
+        if params[:source] == 'watch'
+          format.html { redirect_to watch_path, notice: 'Meal was successfully created.' }
+        else
+          format.html { redirect_to meals_url, notice: 'Meal was successfully created.' }
+        end
       else
         format.html { render :new }
       end
