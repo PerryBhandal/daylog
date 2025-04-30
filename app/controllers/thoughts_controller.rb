@@ -28,7 +28,11 @@ class ThoughtsController < ApplicationController
 
     respond_to do |format|
       if @thought.save
-        format.html { redirect_to @thought, notice: 'Thought was successfully created.' }
+        if params[:source] == 'watch'
+          format.html { redirect_to watch_path, notice: 'Thought was successfully created.' }
+        else
+          format.html { redirect_to @thought, notice: 'Thought was successfully created.' }
+        end
         format.json { render :show, status: :created, location: @thought }
       else
         format.html { render :new }

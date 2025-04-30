@@ -6,7 +6,12 @@
       </div>
     <% else %>
       <div class="watch-current-task">
-        <h1><%= @current_task.task_name %></h1>
+        <h1>
+          <%= @current_task.task_name %>
+          <a href="javascript:void(0)" id="refresh-page" class="refresh-icon">
+            <i class="fa fa-refresh"></i>
+          </a>
+        </h1>
         <div class="watch-timer">
           <span id="watch-time-display"><%= getTimeDiff(@current_task.start_time, DateTime.now) %></span>
         </div>
@@ -17,9 +22,12 @@
     <% end %>
     
     <div class="watch-task-form">
-      <button type="button" id="watch-new-task-btn" class="watch-btn">New Task</button>
+      <div class="watch-buttons-container">
+        <button type="button" id="watch-new-task-btn" class="watch-btn">New Task</button>
+        <button type="button" id="watch-new-thought-btn" class="watch-btn">New Thought</button>
+      </div>
       
-      <div id="watch-task-form-container" style="display: none;">
+      <div id="watch-task-form-container" style="display: none;" class="watch-form-container">
         <%= form_for(@active_task, html: { class: "watch-form" }) do |f| %>
           <%= hidden_field_tag :source, 'watch' %>
           <div class="watch-form-group">
@@ -45,12 +53,32 @@
           </div>
         <% end %>
       </div>
+      
+      <div id="watch-thought-form-container" style="display: none;" class="watch-form-container">
+        <%= form_for(Thought.new, html: { class: "watch-form" }) do |f| %>
+          <%= hidden_field_tag :source, 'watch' %>
+          <div class="watch-form-group">
+            <%= f.text_field :thought, class: "watch-input", placeholder: "Enter thought...", autocomplete: "off" %>
+          </div>
+          <%= f.hidden_field :time_added, value: DateTime.now %>
+          
+          <div class="watch-form-actions">
+            <%= f.submit "Save", class: "watch-btn watch-btn-primary" %>
+            <button type="button" id="watch-cancel-thought-btn" class="watch-btn watch-btn-secondary">Cancel</button>
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
   $(document).ready(function() {
+    // Refresh page when refresh icon is clicked
+    $('#refresh-page').click(function() {
+      location.reload();
+    });
+    
     // Update timer every second
     <% if @current_task != nil %>
       setInterval(function() {
@@ -74,14 +102,26 @@
     
     // Show/hide task form
     $('#watch-new-task-btn').click(function() {
-      $(this).hide();
+      $('.watch-buttons-container').hide();
       $('#watch-task-form-container').show();
       $('#active_task_task_name').focus();
     });
     
     $('#watch-cancel-btn').click(function() {
       $('#watch-task-form-container').hide();
-      $('#watch-new-task-btn').show();
+      $('.watch-buttons-container').show();
+    });
+    
+    // Show/hide thought form
+    $('#watch-new-thought-btn').click(function() {
+      $('.watch-buttons-container').hide();
+      $('#watch-thought-form-container').show();
+      $('#thought_thought').focus();
+    });
+    
+    $('#watch-cancel-thought-btn').click(function() {
+      $('#watch-thought-form-container').hide();
+      $('.watch-buttons-container').show();
     });
     
     // Quick task selection
