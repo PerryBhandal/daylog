@@ -88,9 +88,8 @@
                 # Calculate the total duration of the day in seconds
                 total_duration = (latest_time - earliest_time).to_i
                 
-                # Calculate the height of the calendar (1 hour = 60px)
-                hours_span = (latest_time - earliest_time) * 24
-                calendar_height = [hours_span * 60, 300].max # Minimum height of 300px
+                # Calculate the height of the calendar (fixed height instead of dynamic)
+                calendar_height = 400 # Fixed height of 400px
               %>
               
               <div class="time-axis" style="height: <%= calendar_height %>px;">
@@ -154,6 +153,9 @@
       </div>
     </div>
   <% end %>
+  
+  <!-- Add some space at the bottom to ensure proper scrolling -->
+  <div style="clear: both; height: 50px;"></div>
 </div>
 
 <style>
@@ -204,9 +206,10 @@
     position: relative;
     display: flex;
     margin-top: 20px;
+    margin-bottom: 20px;
     border: 1px solid #dee2e6;
     border-radius: 4px;
-    overflow: hidden;
+    overflow: visible;
   }
   
   .time-axis {
@@ -242,6 +245,7 @@
     overflow: hidden;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     transition: all 0.2s ease;
+    z-index: 1;
   }
   
   .task-block:hover {
