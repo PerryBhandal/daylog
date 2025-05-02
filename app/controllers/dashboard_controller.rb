@@ -1,4 +1,5 @@
 class DashboardController < ApplicationController
+  include ApplicationHelper
   def index
     getCurrentTask
     @active_task = ActiveTask.new
