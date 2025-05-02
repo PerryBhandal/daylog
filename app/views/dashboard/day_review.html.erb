@@ -1,0 +1,312 @@
+<div class="day-review-container">
+  <!-- Header with date selector -->
+  <div class="row day-review-header">
+    <div class="col-md-6">
+      <h1><i class="fa fa-calendar"></i> Day Review</h1>
+    </div>
+    <div class="col-md-6">
+      <div class="date-selector-container">
+        <form action="/day_review" method="get" class="form-inline">
+          <div class="form-group">
+            <label for="date-selector">Select Date:</label>
+            <input type="date" id="date-selector" name="date" class="form-control" value="<%= @selected_date.strftime('%Y-%m-%d') %>">
+          </div>
+          <button type="submit" class="btn btn-primary">View</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day overview -->
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <i class="fa fa-calendar-check-o"></i> <%= @selected_date.strftime("%A, %B %d, %Y") %>
+          </h3>
+        </div>
+        <div class="panel-body">
+          <% if @selected_task_group && @day_tasks.any? %>
+            <div class="day-stats-row">
+              <div class="day-stat">
+                <span class="stat-label">Woke:</span>
+                <span class="stat-value"><%= @day_tasks.first.start_time.strftime("%I:%M %p") %></span>
+              </div>
+              <% if @selected_task_group.postSleepTask %>
+                <div class="day-stat">
+                  <span class="stat-label">Slept:</span>
+                  <span class="stat-value"><%= @selected_task_group.postSleepTask.start_time.strftime("%I:%M %p") %></span>
+                </div>
+                <div class="day-stat">
+                  <span class="stat-label">Time Awake:</span>
+                  <span class="stat-value"><%= getTimeDiff(@day_tasks.first.start_time, @selected_task_group.postSleepTask.start_time) %></span>
+                </div>
+              <% else %>
+                <div class="day-stat">
+                  <span class="stat-label">Slept:</span>
+                  <span class="stat-value">Not yet</span>
+                </div>
+                <div class="day-stat">
+                  <span class="stat-label">Time Awake:</span>
+                  <span class="stat-value"><%= getTimeDiff(@day_tasks.first.start_time, DateTime.now) %></span>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="alert alert-info">
+              No tasks recorded for this date.
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Calendar-style task breakdown -->
+  <% if @selected_task_group && @day_tasks.any? %>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <i class="fa fa-tasks"></i> Daily Task Timeline
+            </h3>
+          </div>
+          <div class="panel-body">
+            <div class="day-calendar">
+              <% 
+                # Calculate the earliest and latest times for the day
+                earliest_time = @day_tasks.first.start_time
+                
+                if @selected_task_group.postSleepTask
+                  latest_time = @selected_task_group.postSleepTask.start_time
+                else
+                  latest_time = DateTime.now > earliest_time.end_of_day ? earliest_time.end_of_day : DateTime.now
+                end
+                
+                # Calculate the total duration of the day in seconds
+                total_duration = (latest_time - earliest_time).to_i
+                
+                # Calculate the height of the calendar (1 hour = 60px)
+                hours_span = (latest_time - earliest_time) * 24
+                calendar_height = [hours_span * 60, 300].max # Minimum height of 300px
+              %>
+              
+              <div class="time-axis" style="height: <%= calendar_height %>px;">
+                <% 
+                  # Create time markers every hour
+                  current_hour = earliest_time.beginning_of_hour
+                  while current_hour <= latest_time
+                    # Calculate position as percentage of total duration
+                    position_percent = ((current_hour - earliest_time).to_i.to_f / total_duration) * 100
+                %>
+                  <div class="time-marker" style="top: <%= position_percent %>%;">
+                    <%= current_hour.strftime("%I:%M %p") %>
+                  </div>
+                <% 
+                    current_hour += 1.hour
+                  end 
+                %>
+              </div>
+              
+              <div class="task-blocks" style="height: <%= calendar_height %>px;">
+                <% @day_tasks.each_with_index do |task, index| %>
+                  <% 
+                    # Calculate task start position
+                    start_position = ((task.start_time - earliest_time).to_i.to_f / total_duration) * 100
+                    
+                    # Calculate task end time and position
+                    if index < @day_tasks.length - 1
+                      end_time = @day_tasks[index + 1].start_time
+                    elsif @selected_task_group.postSleepTask
+                      end_time = @selected_task_group.postSleepTask.start_time
+                    else
+                      end_time = latest_time
+                    end
+                    
+                    end_position = ((end_time - earliest_time).to_i.to_f / total_duration) * 100
+                    
+                    # Calculate task height
+                    height = end_position - start_position
+                    
+                    # Calculate task duration for display
+                    duration_seconds = (end_time - task.start_time).to_i
+                    hours = duration_seconds / 3600
+                    minutes = (duration_seconds % 3600) / 60
+                    duration_display = "#{hours}h #{minutes}m"
+                    
+                    # Generate a color based on task name (for consistency)
+                    hue = task.task_name.sum % 360
+                    task_color = "hsl(#{hue}, 70%, 60%)"
+                  %>
+                  
+                  <div class="task-block" style="top: <%= start_position %>%; height: <%= height %>%; background-color: <%= task_color %>;">
+                    <div class="task-time"><%= task.start_time.strftime("%I:%M %p") %></div>
+                    <div class="task-name"><%= task.task_name %></div>
+                    <div class="task-duration"><%= duration_display %></div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<style>
+  .day-review-container {
+    padding: 20px;
+  }
+  
+  .day-review-header {
+    margin-bottom: 20px;
+  }
+  
+  .date-selector-container {
+    text-align: right;
+    padding-top: 20px;
+  }
+  
+  .date-selector-container label {
+    margin-right: 10px;
+  }
+  
+  .day-stats-row {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+  
+  .day-stat {
+    text-align: center;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    min-width: 150px;
+  }
+  
+  .stat-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #6c757d;
+  }
+  
+  .stat-value {
+    font-size: 1.2em;
+    color: #343a40;
+  }
+  
+  .day-calendar {
+    position: relative;
+    display: flex;
+    margin-top: 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .time-axis {
+    width: 80px;
+    position: relative;
+    background-color: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+  }
+  
+  .time-marker {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    padding: 2px 5px;
+    border-top: 1px solid #dee2e6;
+    font-size: 0.8em;
+    color: #6c757d;
+  }
+  
+  .task-blocks {
+    flex-grow: 1;
+    position: relative;
+  }
+  
+  .task-block {
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding: 8px;
+    border-radius: 4px;
+    margin: 0 5px;
+    color: white;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+  }
+  
+  .task-block:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    z-index: 10;
+  }
+  
+  .task-time {
+    font-size: 0.8em;
+    opacity: 0.9;
+  }
+  
+  .task-name {
+    font-weight: bold;
+    margin: 5px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .task-duration {
+    font-size: 0.8em;
+    opacity: 0.9;
+  }
+  
+  @media (max-width: 768px) {
+    .date-selector-container {
+      text-align: left;
+      padding-top: 0;
+    }
+    
+    .day-stats-row {
+      flex-direction: column;
+    }
+    
+    .day-stat {
+      margin-bottom: 10px;
+    }
+  }
+</style>
+
+<script>
+  $(document).ready(function() {
+    // Initialize date picker if needed
+    if ($.fn.datepicker) {
+      $('#date-selector').datepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true
+      });
+    }
+    
+    // Adjust task block display for small heights
+    $('.task-block').each(function() {
+      var block = $(this);
+      var height = block.height();
+      
+      if (height < 30) {
+        block.addClass('compact');
+        if (height < 20) {
+          block.find('.task-duration').hide();
+        }
+        if (height < 15) {
+          block.find('.task-name').hide();
+        }
+      }
+    });
+  });
+</script>

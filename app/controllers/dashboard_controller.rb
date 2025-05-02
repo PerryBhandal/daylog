@@ -18,6 +18,26 @@ class DashboardController < ApplicationController
     setWatchTitle
     render layout: 'watch'
   end
+  
+  def day_review
+    # Get the date from params or default to today
+    @selected_date = params[:date] ? Date.parse(params[:date]) : Date.today
+    
+    # Get all task groups
+    @task_groups = getTaskGroups
+    
+    # Find the task group for the selected date
+    @selected_task_group = find_task_group_for_date(@selected_date)
+    
+    # Get tasks for the selected day
+    if @selected_task_group
+      @day_tasks = @selected_task_group.dayTasks
+    else
+      @day_tasks = []
+    end
+    
+    setDayReviewTitle
+  end
 
   protected
 
@@ -27,6 +47,25 @@ class DashboardController < ApplicationController
   
   def setWatchTitle
     @title = "Watch"
+  end
+  
+  def setDayReviewTitle
+    @title = "Day Review"
+  end
+  
+  # Find the task group for a specific date
+  def find_task_group_for_date(date)
+    # Convert date to beginning and end of day in UTC
+    start_of_day = date.beginning_of_day
+    end_of_day = date.end_of_day
+    
+    # Find the task group that has tasks within this date range
+    @task_groups.find do |task_group|
+      # Check if any task in this group falls within the date range
+      task_group.dayTasks.any? do |task|
+        task.start_time >= start_of_day && task.start_time <= end_of_day
+      end
+    end
   end
 
   private

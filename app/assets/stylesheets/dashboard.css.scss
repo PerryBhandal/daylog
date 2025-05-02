@@ -149,6 +149,142 @@
   }
 }
 
+// Day Review styles
+.day-review-container {
+  padding: 15px 0;
+  
+  .day-review-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    
+    h1 {
+      margin-top: 0;
+      margin-bottom: 5px;
+      font-size: 28px;
+      color: #2980b9;
+    }
+  }
+  
+  .date-selector-container {
+    text-align: right;
+    padding-top: 20px;
+    
+    label {
+      margin-right: 10px;
+      font-weight: bold;
+    }
+    
+    .form-control {
+      display: inline-block;
+      width: auto;
+    }
+  }
+  
+  .day-stats-row {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    
+    .day-stat {
+      text-align: center;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 4px;
+      min-width: 150px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      
+      .stat-label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #777;
+      }
+      
+      .stat-value {
+        font-size: 1.2em;
+        color: #2980b9;
+      }
+    }
+  }
+  
+  .day-calendar {
+    position: relative;
+    display: flex;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    
+    .time-axis {
+      width: 80px;
+      position: relative;
+      background-color: #f9f9f9;
+      border-right: 1px solid #ddd;
+      
+      .time-marker {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        padding: 2px 5px;
+        border-top: 1px solid #ddd;
+        font-size: 0.8em;
+        color: #777;
+      }
+    }
+    
+    .task-blocks {
+      flex-grow: 1;
+      position: relative;
+      
+      .task-block {
+        position: absolute;
+        left: 0;
+        right: 0;
+        padding: 8px;
+        border-radius: 4px;
+        margin: 0 5px;
+        color: white;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        transition: all 0.2s ease;
+        
+        &:hover {
+          box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+          z-index: 10;
+        }
+        
+        .task-time {
+          font-size: 0.8em;
+          opacity: 0.9;
+        }
+        
+        .task-name {
+          font-weight: bold;
+          margin: 5px 0;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        
+        .task-duration {
+          font-size: 0.8em;
+          opacity: 0.9;
+        }
+        
+        &.compact {
+          padding: 4px;
+          
+          .task-name {
+            margin: 2px 0;
+          }
+        }
+      }
+    }
+  }
+}
+
 // Responsive adjustments
 @media (max-width: 767px) {
   .dashboard-header {
@@ -161,6 +297,23 @@
   .daily-summary-panel {
     .col-md-7, .col-md-5 {
       margin-bottom: 15px;
+    }
+  }
+  
+  .day-review-container {
+    .date-selector-container {
+      text-align: left;
+      padding-top: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .day-stats-row {
+      flex-direction: column;
+      
+      .day-stat {
+        margin-bottom: 10px;
+        width: 100%;
+      }
     }
   }
 }
