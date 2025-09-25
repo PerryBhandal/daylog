@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Setup script for DayLog application on a fresh Debian installation
+# Setup script for DayLog application on a fresh Debian/Ubuntu installation
 # This script will install all necessary dependencies and set up the application
 #
 # Usage:
@@ -16,7 +16,16 @@ set -e  # Exit on error
 
 # Check if running as root
 if [ "$(id -u)" = "0" ]; then
-   echo "This script should not be run as root" 
+   echo "ERROR: This script should NOT be run as root or with 'sudo su'!"
+   echo ""
+   echo "Please run this script as a regular user. The script will use 'sudo'"
+   echo "for commands that require elevated privileges."
+   echo ""
+   echo "If you're currently in 'sudo su' mode, please exit and run:"
+   echo "  SOURCE_DIR=/path/to/daylog ./setup_daylog.sh"
+   echo ""
+   echo "Or if running from the daylog directory:"
+   echo "  ./setup_daylog.sh"
    exit 1
 fi
 
