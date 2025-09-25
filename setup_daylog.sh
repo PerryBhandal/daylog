@@ -38,7 +38,8 @@ sudo apt-get update
 # Install system dependencies
 echo "=== Installing system dependencies ==="
 sudo apt-get install -y git curl build-essential libssl-dev libreadline-dev \
-  zlib1g-dev sqlite3 libsqlite3-dev nodejs screen libnotify-bin
+  zlib1g-dev sqlite3 libsqlite3-dev nodejs screen libnotify-bin \
+  pkg-config libxml2-dev libxslt1-dev libexslt-dev
 
 # Install rbenv for Ruby version management
 echo "=== Installing rbenv ==="
