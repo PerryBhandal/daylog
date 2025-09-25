@@ -80,9 +80,23 @@ if [ ! -d "daylog" ]; then
       echo "Running from within the daylog repository. Using current directory as source."
       SOURCE_DIR="$SCRIPT_DIR"
     else
-      echo "No source directory specified. Please provide the path to the daylog repository."
-      echo "Usage: SOURCE_DIR=/path/to/daylog ./setup_daylog.sh"
-      exit 1
+      # Default to /home/ubuntu/daylog if it exists, otherwise /home/$USER/daylog
+      if [ -d "/home/ubuntu/daylog" ]; then
+        SOURCE_DIR="/home/ubuntu/daylog"
+        echo "No source directory specified. Using default: $SOURCE_DIR"
+      elif [ -d "/home/$USER/daylog" ]; then
+        SOURCE_DIR="/home/$USER/daylog"
+        echo "No source directory specified. Using default: $SOURCE_DIR"
+      else
+        echo "No source directory specified and default locations not found."
+        echo "Please provide the path to the daylog repository:"
+        echo "Usage: SOURCE_DIR=/path/to/daylog ./setup_daylog.sh"
+        echo ""
+        echo "Or ensure the daylog repository exists at one of these locations:"
+        echo "  /home/ubuntu/daylog"
+        echo "  /home/$USER/daylog"
+        exit 1
+      fi
     fi
   fi
   
