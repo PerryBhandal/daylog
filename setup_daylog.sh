@@ -60,6 +60,22 @@ export RUBY_CONFIGURE_OPTS="--disable-install-doc"
 rbenv install -s 2.3.3
 rbenv global 2.3.3
 
+# Refresh rbenv shims and verify Ruby version
+rbenv rehash
+export PATH="$HOME/.rbenv/shims:$PATH"
+
+# Verify Ruby version
+echo "=== Verifying Ruby version ==="
+RUBY_VERSION=$(ruby -v)
+echo "Current Ruby version: $RUBY_VERSION"
+if ! ruby -v | grep -q "2.3.3"; then
+  echo "ERROR: Ruby 2.3.3 is not active. Current version: $(ruby -v)"
+  echo "Attempting to fix..."
+  rbenv shell 2.3.3
+  export PATH="$HOME/.rbenv/versions/2.3.3/bin:$PATH"
+  echo "Ruby version after fix: $(ruby -v)"
+fi
+
 # Install Bundler
 echo "=== Installing Bundler ==="
 gem install bundler -v '< 2.0'
@@ -124,7 +140,10 @@ bundle update
 
 # Setup the database
 echo "=== Setting up the database ==="
-bundle exec rake db:setup RAILS_ENV=production
+echo "Running database migrations..."
+bundle exec rake db:migrate RAILS_ENV=production
+echo "Setting up database with seed data..."
+bundle exec rake db:seed RAILS_ENV=production
 
 # Precompile assets
 echo "=== Precompiling assets ==="
