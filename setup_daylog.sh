@@ -92,7 +92,7 @@ if [ ! -d "daylog" ]; then
   if [ -z "$SOURCE_DIR" ]; then
     # Check if we're running from within the daylog repository
     SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-    if [[ "$SCRIPT_DIR" == */daylog* ]] || [[ -f "$SCRIPT_DIR/Gemfile" && -d "$SCRIPT_DIR/app" ]]; then
+    if [[ -f "$SCRIPT_DIR/Gemfile" && -d "$SCRIPT_DIR/app" ]]; then
       echo "Running from within the daylog repository. Using current directory as source."
       SOURCE_DIR="$SCRIPT_DIR"
     else
@@ -118,6 +118,17 @@ if [ ! -d "daylog" ]; then
   
   # Copy from the source directory
   echo "Copying from $SOURCE_DIR to ~/apps/daylog"
+  
+  # Check if we're trying to copy into a subdirectory of the source
+  DEST_DIR="$HOME/apps/daylog"
+  if [[ "$DEST_DIR" == "$SOURCE_DIR"* ]]; then
+    echo "ERROR: Cannot copy source directory into itself or its subdirectory."
+    echo "Source: $SOURCE_DIR"
+    echo "Destination: $DEST_DIR"
+    echo "Please run this script from a different location or specify a different SOURCE_DIR."
+    exit 1
+  fi
+  
   cp -r "$SOURCE_DIR" ~/apps/daylog
 else
   echo "Directory ~/apps/daylog already exists. Using existing directory."
