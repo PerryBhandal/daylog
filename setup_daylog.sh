@@ -160,6 +160,10 @@ EOF
   chmod +x scripts/launchSite.sh
 fi
 
+# Configure nokogiri gem to use system libraries
+echo "=== Configuring nokogiri gem ==="
+bundle config build.nokogiri --use-system-libraries
+
 # Install gems
 echo "=== Installing gems ==="
 bundle install
