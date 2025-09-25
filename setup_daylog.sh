@@ -47,10 +47,11 @@ if [ ! -d "$HOME/.rbenv" ]; then
   echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
   echo 'eval "$(rbenv init -)"' >> ~/.bashrc
   git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
-  source ~/.bashrc
-  export PATH="$HOME/.rbenv/bin:$PATH"
-  eval "$(rbenv init -)"
 fi
+
+# Set up rbenv in current session
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
 
 # Install Ruby 2.3.3
 echo "=== Installing Ruby 2.3.3 (this may take a while) ==="
